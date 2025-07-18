@@ -1,0 +1,70 @@
+﻿@page "/schedulerItem"
+@inject IScheduleHandler _scheduleHandler;
+@inject NavigationManager NavigationManager
+
+<h3>Create scheduler item</h3>
+
+<MudSelect @bind-Value="dayOfWeek" Label="Select day of the week" HelperText="day" OpenIcon="@Icons.Material.Filled.CalendarViewDay" AdornmentColor="Color.Secondary">
+    @foreach (DayOfWeek item in Enum.GetValues(typeof(DayOfWeek)))
+    {
+        <MudSelectItem Value="@item">@item</MudSelectItem>
+    }
+</MudSelect>
+
+<MudTimePicker @ref="_picker" @bind-time="time" PickerVariant="PickerVariant.Dialog" Color="Color.Secondary" MinuteSelectionStep="5">
+    @*     <PickerActions>
+        <MudButton Class="mr-auto align-self-start" OnClick="@(() => _picker.ClearAsync())">Clear</MudButton>
+        <MudButton OnClick="@(() => _picker.CloseAsync(false))">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="@(() => _picker.CloseAsync())">OK</MudButton>
+    </PickerActions> *@
+</MudTimePicker>
+
+<MudSelect @bind-Value="type" Label="Select schedule type" HelperText="type" OpenIcon="@Icons.Material.Filled.Adjust" AdornmentColor="Color.Secondary">
+    @foreach (ScheduleType item in Enum.GetValues(typeof(ScheduleType)))
+    {
+        <MudSelectItem Value="@item">@item</MudSelectItem>
+    }
+</MudSelect>
+
+<MudSelect @bind-Value="action" Label="Select schedule action" HelperText="action" OpenIcon="@Icons.Material.Filled.Adjust" AdornmentColor="Color.Secondary">
+    @foreach (ScheduleAction item in Enum.GetValues(typeof(ScheduleAction)))
+    {
+        <MudSelectItem Value="@item">@item</MudSelectItem>
+    }
+</MudSelect>
+
+<MudTextField @bind-Value="data" Label="data" Variant="Variant.Text"></MudTextField>
+
+<MudButton OnClick="CreateSchedule">Create schedule item</MudButton>
+
+@code {
+    private List<ScheduleItem> _scheduleItemList;
+    private MudTimePicker _picker;
+
+    private DayOfWeek dayOfWeek;
+    private TimeSpan? time;
+    private ScheduleType type;
+    private ScheduleAction action;
+    private string data;
+
+
+    private ScheduleItem? _scheduleItem;
+
+    protected override void OnInitialized()
+    {
+        dayOfWeek = DayOfWeek.Monday;
+        time = DateTime.Now.TimeOfDay;
+        data = "http://192.168.2.45/on";
+    }
+
+    private void CreateSchedule()
+    {
+        TimeOnly timeOnly = TimeOnly.FromTimeSpan(time.Value);
+        
+        _scheduleItem = new ScheduleItem(dayOfWeek, timeOnly, type, action, data);
+        if(_scheduleHandler.AddToSchedule(_scheduleItem))
+        {
+            NavigationManager.NavigateTo("/scheduler");
+        }
+    }
+}

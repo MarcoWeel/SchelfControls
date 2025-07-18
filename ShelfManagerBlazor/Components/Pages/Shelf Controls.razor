@@ -1,0 +1,61 @@
+﻿@page "/"
+
+@inject IControls _controls;
+
+<PageTitle>Shelf controls</PageTitle>
+
+<MudText Typo="Typo.h3" GutterBottom="true">Shelf Controls</MudText>
+
+<MudButton Color="Color.Primary" Variant="Variant.Filled" @onclick="TurnOnClick">Turn on</MudButton>
+
+<MudButton Color="Color.Primary" Variant="Variant.Filled" @onclick="TurnOffClick">Turn off</MudButton>
+@* <MudSlider @onchange="ChangeColorView" Variant="Variant.Filled" ValueLabel="true" Min="0" Max="255" Style="@($"color:{Colors.Red.Default};")" @bind-Value="@red">Red</MudSlider> *@
+@* <MudSlider @onchange="ChangeColorView" Variant="Variant.Filled" ValueLabel="true" Min="0" Max="255" Style="@($"color:{Colors.Green.Default};")" @bind-Value="@green">Green</MudSlider> *@
+@* <MudSlider @onchange="ChangeColorView" Variant="Variant.Filled" ValueLabel="true" Min="0" Max="255" Style="@($"color:{Colors.Blue.Default};")" @bind-Value="@blue">Blue</MudSlider> *@
+<div></div>
+<MudSlider Variant="Variant.Filled" ValueLabel="true" Min="0" Max="255" Style="@($"color:{Colors.Shades.White}; Max-Width: 400px")" Vertical="false" Disabled="@disableWhite" @bind-Value="@white">White</MudSlider>
+<MudCheckBox @onclick="toggleDisable" @bind-Value="@disableWhite" Label="Disable white"></MudCheckBox>
+<MudColorPicker PickerVariant="PickerVariant.Static" Style="width: fit-content" @bind-Value="@colorValue" ShowAlpha="false" ShowModeSwitch="false" />
+@* <MudColorPicker Label="Basic Color Picker" @bind-="_colorValue" Style="@($"color: {_colorValue};")" Placeholder="Select Color" /> *@
+
+<MudButton Color="Color.Primary" Variant="Variant.Filled" @onclick="ChangeColorClick">Change color</MudButton>
+
+@code {
+    private int white = 0;
+    private int whiteTempValue = 0;
+    private bool disableWhite = true;
+
+    private MudColor colorValue = new MudColor(0, 0, 0, 255);
+
+    private int currentCount = 0;
+
+    private void toggleDisable()
+    {
+        if (!disableWhite)
+        {
+            whiteTempValue = white;
+            white = 0;
+        }
+        else
+        {
+            white = whiteTempValue;
+        }
+        disableWhite = !disableWhite;
+    }
+
+    private async void TurnOffClick()
+    {
+        await _controls.TurnOff();
+    }
+
+    private async void TurnOnClick()
+    {
+        await _controls.TurnOn();
+    }
+
+    private async void ChangeColorClick()
+    {
+        await _controls.ChangeColor(colorValue.R, colorValue.G, colorValue.B, white);
+    }
+}
+

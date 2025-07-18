@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfScheduleItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ScheduleItem>
+    <ID>00000000-0000-0000-0000-000000000000</ID>
+    <Time />
+    <DayOfWeek>Monday</DayOfWeek>
+    <ScheduleType>Base</ScheduleType>
+    <ScheduleAction>Http</ScheduleAction>
+    <ScheduleActionData>http://192.168.2.45/off</ScheduleActionData>
+  </ScheduleItem>
+</ArrayOfScheduleItem>

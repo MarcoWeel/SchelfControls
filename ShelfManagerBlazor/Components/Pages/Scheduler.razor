@@ -1,0 +1,49 @@
+﻿@page "/scheduler"
+@inject IScheduleHandler _scheduleHandler;
+
+<h3>Scheduler</h3>
+
+<MudLink Href="/scheduleritem">Add item</MudLink>
+<MudDataGrid Items="@_scheduleItemList">
+    <Columns>
+        <PropertyColumn Property="x => x.DayOfWeek" Title="Day" />
+        <PropertyColumn Property="x => x.Time" />
+        <PropertyColumn Property="x => x.ScheduleType" />
+        <PropertyColumn Property="x => x.ScheduleAction" />
+        <PropertyColumn Property="x => x.ScheduleActionData" />
+    </Columns>
+</MudDataGrid>
+
+
+@code {
+    private List<ScheduleItem> _scheduleItemList;
+
+    private DayOfWeek dayOfWeek;
+
+    private ScheduleItem? _scheduleItem;
+
+    protected override void OnInitialized()
+    {
+        GetSchedule();
+    }
+
+    private void GetSchedule()
+    {
+        _scheduleItemList = _scheduleHandler.GetAllSchedules();
+    }
+
+    private void GetScheduleByWeekDay()
+    {
+        _scheduleItemList = _scheduleHandler.GetAllSchedules();
+    }
+
+    private void AddToSchedule()
+    {
+        _scheduleItemList = _scheduleHandler.GetAllSchedules();
+    }
+
+    private void RemoveFromSchedule()
+    {
+        _scheduleItemList = _scheduleHandler.GetAllSchedules();
+    }
+}
